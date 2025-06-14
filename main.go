@@ -92,7 +92,7 @@ func handleClicks() {
 			verboseLog.Println("Нажата кнопка 'Подключиться'")
 			mConnect.SetTitle("Подключение...")
 			mConnect.Disable()
-			if err := adguardCLI.Connect(""); err != nil {
+			if err := adguardCLI.Connect(); err != nil {
 				log.Printf("Ошибка при подключении: %v", err)
 			}
 			updateStatusUI() // Немедленно обновить UI
