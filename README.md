@@ -41,8 +41,8 @@ It connects to the fastest available location, equivalent to running
 
 1.  Clone the repository:
     ```bash
-    git clone https://github.com/FroggerHH/adguard-indicator.git
-    cd adguard-indicator
+    git clone https://github.com/FroggerHH/adguard-vpn-indicator.git
+    cd adguard-vpn-indicator
     ```
 
 2.  Build the binary:
@@ -54,13 +54,13 @@ It connects to the fastest available location, equivalent to running
 
 1.  Run the compiled application:
     ```bash
-    ./adguard-vpn-indicator-indicator
+    ./adguard-vpn-indicator
     ```
 
 2.  For debugging, you can run it with the `-v` flag for verbose
     logging in the console:
     ```bash
-    ./adguard-indicator -v
+    ./adguard-vpn-indicator -v
     ```
 
 After launching, an icon will appear in the system tray. Right-click on
