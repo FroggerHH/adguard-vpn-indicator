@@ -9,7 +9,7 @@ import (
 	"os"
 	"time"
 
-	"adguard-tray/cli"
+	"adguard-vpn-indicator/cli"
 
 	"fyne.io/systray"
 )

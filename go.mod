@@ -1,4 +1,4 @@
-module adguard-tray
+module adguard-vpn-indicator
 
 go 1.24.4
 

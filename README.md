@@ -54,7 +54,7 @@ It connects to the fastest available location, equivalent to running
 
 1.  Run the compiled application:
     ```bash
-    ./adguard-tray-indicator
+    ./adguard-vpn-indicator-indicator
     ```
 
 2.  For debugging, you can run it with the `-v` flag for verbose
