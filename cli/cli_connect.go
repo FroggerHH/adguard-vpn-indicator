@@ -34,7 +34,6 @@ func New(executablePath string, logger *log.Logger) *AdGuardCLI {
 	}
 }
 
-// GetStatus не требует прав и остается без изменений.
 func (c *AdGuardCLI) GetStatus() (*VpnStatus, error) {
 	c.logger.Println("Вызов команды:", c.ExecutablePath, "status")
 	cmd := exec.Command(c.ExecutablePath, "status")
@@ -75,7 +74,6 @@ func (c *AdGuardCLI) Connect() error {
 	return nil
 }
 
-// Disconnect также запускается в новом окне терминала.
 func (c *AdGuardCLI) Disconnect() error {
 	c.logger.Println("Вызов команды:", c.ExecutablePath, "disconnect")
 	cmd := exec.Command(c.ExecutablePath, "disconnect")

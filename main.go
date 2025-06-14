@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "embed"
 	"flag"
 	"fmt"
 	"io"
@@ -13,11 +14,16 @@ import (
 	"fyne.io/systray"
 )
 
+//go:embed assets/icon_connected.png
+var iconConnected []byte
+
+//go:embed assets/icon_disconnected.png
+var iconDisconnected []byte
+
 var (
 	verboseLog *log.Logger
 	adguardCLI *cli.AdGuardCLI
 
-	// 1. Объявляем пункты меню как глобальные переменные
 	mStatus     *systray.MenuItem
 	mConnect    *systray.MenuItem
 	mQuit       *systray.MenuItem
@@ -44,15 +50,10 @@ func main() {
 func onReady() {
 	verboseLog.Println("onReady: начало настройки трея.")
 
-	icon, err := os.ReadFile("assets/icon_disconnected.png")
-	if err != nil {
-		log.Fatalf("Не удалось загрузить иконку: %v", err)
-	}
-	systray.SetIcon(icon)
+	systray.SetIcon(iconDisconnected)
 	systray.SetTitle("AdGuard VPN Status")
 	systray.SetTooltip("AdGuard VPN Status")
 
-	// 2. Создаем все пункты меню при запуске
 	mStatus = systray.AddMenuItem("Статус: Проверка...", "Текущий статус VPN")
 	mStatus.Disable()
 
@@ -60,22 +61,18 @@ func onReady() {
 
 	mConnect = systray.AddMenuItem("Подключиться (лучшая локация)", "Подключиться к самому быстрому серверу")
 	mDisconnect = systray.AddMenuItem("Отключиться", "Отключиться от VPN")
-
-	// Изначально скрываем кнопку "Отключиться"
 	mDisconnect.Hide()
 
 	systray.AddSeparator()
 	mQuit = systray.AddMenuItem("Выход", "Закрыть приложение")
 
-	// 3. Запускаем обработчики кликов
 	go handleClicks()
 
-	// Запускаем цикл обновления статуса
 	go func() {
 		ticker := time.NewTicker(5 * time.Second)
 		defer ticker.Stop()
 
-		updateStatusUI() // Первый запуск
+		updateStatusUI()
 		for range ticker.C {
 			updateStatusUI()
 		}
@@ -84,7 +81,6 @@ func onReady() {
 	verboseLog.Println("onReady: настройка трея завершена.")
 }
 
-// 4. Новая функция для обработки всех кликов в одном месте
 func handleClicks() {
 	for {
 		select {
@@ -95,7 +91,7 @@ func handleClicks() {
 			if err := adguardCLI.Connect(); err != nil {
 				log.Printf("Ошибка при подключении: %v", err)
 			}
-			updateStatusUI() // Немедленно обновить UI
+			updateStatusUI()
 			mConnect.SetTitle("Подключиться (лучшая локация)")
 			mConnect.Enable()
 
@@ -106,25 +102,26 @@ func handleClicks() {
 			if err := adguardCLI.Disconnect(); err != nil {
 				log.Printf("Ошибка при отключении: %v", err)
 			}
-			updateStatusUI() // Немедленно обновить UI
+			updateStatusUI()
 			mDisconnect.SetTitle("Отключиться")
 			mDisconnect.Enable()
 
 		case <-mQuit.ClickedCh:
 			systray.Quit()
-			return // Выход из цикла и горутины
+			return
 		}
 	}
 }
 
-// 5. Переименованная и обновленная функция для обновления UI
+// 4. Добавляем смену иконок в функцию обновления UI.
 func updateStatusUI() {
 	status, err := adguardCLI.GetStatus()
 	if err != nil {
 		errMsg := "Ошибка: статус неизвестен"
 		mStatus.SetTitle(errMsg)
 		log.Printf("%s: %v", errMsg, err)
-		// В случае ошибки скрываем обе кнопки для безопасности
+
+		systray.SetIcon(iconDisconnected)
 		mConnect.Hide()
 		mDisconnect.Hide()
 		return
@@ -132,10 +129,12 @@ func updateStatusUI() {
 
 	if status.IsConnected {
 		mStatus.SetTitle(fmt.Sprintf("Подключено: %s", status.Location))
+		systray.SetIcon(iconConnected)
 		mConnect.Hide()
 		mDisconnect.Show()
 	} else {
 		mStatus.SetTitle("Отключено")
+		systray.SetIcon(iconDisconnected)
 		mConnect.Show()
 		mDisconnect.Hide()
 	}
