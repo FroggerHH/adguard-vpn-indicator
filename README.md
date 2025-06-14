@@ -1,6 +1,6 @@
 # AdGuard VPN Tray Indicator
 
-[English](./README.md) | [Русский](./README.ru.md)
+[English](./README.md) | [Русский](./README_ru.md)
 ***
 
 > ⚠️ **Warning!**
