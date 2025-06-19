@@ -5,7 +5,7 @@
 
 > ⚠️ **Warning!**
 >
-> This project was vibe coded aka written by an AI. I don't know Go. The code was
+> This project was written with the help of AI. I don't know Go. The code was
 > created to solve a specific problem and might not follow all best
 > practices.
 
